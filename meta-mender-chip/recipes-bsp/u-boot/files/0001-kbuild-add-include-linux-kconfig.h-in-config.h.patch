@@ -1,0 +1,26 @@
+From 4ac96345b22cc8dcd299c6012cc5c80e44058bae Mon Sep 17 00:00:00 2001
+From: Patrick Delaunay <patrick.delaunay@st.com>
+Date: Fri, 27 Jan 2017 11:00:40 +0100
+Subject: [PATCH] kbuild: add include linux/kconfig.h in config.h
+
+Allow to use define CONFIG_IS_ENABLED
+in include/config_fallbacks.h
+
+Signed-off-by: Patrick Delaunay <patrick.delaunay@st.com>
+Signed-off-by: Patrick Delaunay <patrick.delaunay73@gmail.com>
+---
+ scripts/Makefile.autoconf | 1 +
+ 1 file changed, 1 insertion(+)
+
+Index: git/scripts/Makefile.autoconf
+===================================================================
+--- git.orig/scripts/Makefile.autoconf
++++ git/scripts/Makefile.autoconf
+@@ -95,6 +95,7 @@ define filechk_config_h
+ 	echo \#include \<config_uncmd_spl.h\>;				\
+ 	echo \#include \<configs/$(CONFIG_SYS_CONFIG_NAME).h\>;		\
+ 	echo \#include \<asm/config.h\>;				\
++	echo \#include \<linux/kconfig.h\>;				\
+ 	echo \#include \<config_fallbacks.h\>;)
+ endef
+ 

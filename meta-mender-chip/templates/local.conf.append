@@ -1,0 +1,34 @@
+# Appended fragment from meta-mender-community/meta-mender-chip/templates
+
+MACHINE ?= "chip"
+
+# Define the nand flash
+MENDER_MTDIDS = "nand0=sunxi-nand.0"
+MENDER_MTDPARTS = "sunxi-nand.0:4m(spl),4m(spl-backup),4m(u-boot),8m(u-boot-env),-(ubi)"
+MENDER_UBOOT_STORAGE_INTERFACE = "ubi"
+MENDER_UBOOT_STORAGE_DEVICE = "4"
+BOOTENV_SIZE = "0x400000"
+MENDER_RESERVED_SPACE_BOOTLOADER_DATA = "0x800000"
+
+# Environment
+MENDER_UBOOT_ENV_STORAGE_DEVICE_OFFSET_1 = "0x0C00000"
+# Redundant environment
+MENDER_UBOOT_ENV_STORAGE_DEVICE_OFFSET_2 = "0x1000000"
+
+# This device have a rather odd MLC flash.
+# None of the default parameters match
+MENDER_UBI_LEB_SIZE = "2064384"
+MENDER_STORAGE_PEB_SIZE = "4194304"
+MENDER_NAND_FLASH_PAGE_SIZE = "16384"
+MENDER_PARTITION_ALIGNMENT = "2097152"
+MENDER_STORAGE_TOTAL_SIZE_MB = "4096"
+
+# We cannot fill the SPL parts of NAND so may as well disable the feature
+IMAGE_FSTYPES:remove = "mtdimg"
+
+# This device does not have a boot partition
+MENDER_BOOT_PART = ""
+MENDER_BOOT_PART_SIZE_MB = "0"
+
+# Add wifi for fun
+IMAGE_INSTALL:append = " chip-packagegroup-wifi"
