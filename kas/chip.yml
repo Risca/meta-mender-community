@@ -6,7 +6,7 @@ header:
 repos:
   meta-chip:
     url: https://github.com/Risca/meta-chip.git
-    refspec: bfe16f2abc67dbe3f211c54269ed41d10031e0ca
+    refspec: 1c15ef07608833f6d5c1636e49cad8a7db98c59b
 
   meta-mender-community:
     layers:

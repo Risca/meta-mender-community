@@ -4,7 +4,6 @@ SRC_URI += "\
         file://0001-kbuild-add-include-linux-kconfig.h-in-config.h.patch \
         file://0002-Allow-providing-default-environment-from-file.patch \
         file://0003-mender_chip_config.patch \
-        file://0004-add_mlc_nand_support.patch \
         file://fw_env.config.default \
 "
 
