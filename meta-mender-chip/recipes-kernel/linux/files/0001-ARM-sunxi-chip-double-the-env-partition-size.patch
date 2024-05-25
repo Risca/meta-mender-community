@@ -1,0 +1,35 @@
+From f3dd8657c4dd2b665137d5f76058a0606a023e3f Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Patrik=20Dahlstr=C3=B6m?= <risca@dalakolonin.se>
+Date: Fri, 24 May 2024 22:25:48 +0000
+Subject: [PATCH] ARM: sunxi: chip: double the env partition size
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This is done to hold dual environments.
+
+Signed-off-by: Patrik Dahlström <risca@dalakolonin.se>
+---
+ arch/arm/boot/dts/sun5i-r8-chip.dts | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm/boot/dts/sun5i-r8-chip.dts b/arch/arm/boot/dts/sun5i-r8-chip.dts
+index 1d77c0578c78..fdaca5393f31 100644
+--- a/arch/arm/boot/dts/sun5i-r8-chip.dts
++++ b/arch/arm/boot/dts/sun5i-r8-chip.dts
+@@ -218,10 +218,10 @@
+ 
+ 		env@c00000 {
+ 			label = "env";
+-			reg = /bits/ 64 <0xc00000 0x400000>;
++			reg = /bits/ 64 <0xc00000 0x800000>;
+ 		};
+ 
+-		rootfs@1000000 {
++		rootfs@1400000 {
+ 			label = "rootfs";
+ 			reg = /bits/ 64 <0x1000000 0x1ff000000>;
+ 		};
+-- 
+2.39.2
+
