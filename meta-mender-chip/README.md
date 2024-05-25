@@ -33,9 +33,11 @@ Follow the instruction on at the link below to build images with Mender integrat
 
  - [meta-mender-community Quick start](https://github.com/mendersoftware/meta-mender-community?tab=readme-ov-file#quick-start)
 
-While it builds, follow the instructions to download and build the chip-tools from here:
+While it builds, follow the instructions to download and build the "flashing" and `chip-tools` from here:
 
- - [meta-chip flash procedure](https://github.com/Risca/meta-chip?tab=readme-ov-file#chip)
+ - [meta-chip flash procedure](https://github.com/Risca/meta-chip/tree/kirkstone?tab=readme-ov-file#using)
+
+You don't have to follow the Yocto instructions beyond step 3.
 
 When the build has finished, copy `sunxi-spl.bin`, `u-boot-dtb.bin `, and `core-image-minimal-chip.ubimg` to a separate folder.
 Rename `core-image-minimal-chip.ubimg` to `rootfs.ubi` and flash using the following command:
@@ -125,3 +127,17 @@ Now, the Mender documentation recommends keeping dual environments as two separa
 However, this use case is not supported by the u-boot version available and would require additional work on the bootloader.
 The Yocto support for Mender currently adds these two volumes to the UBI partition during build, but they are unused on the C.H.I.P.
 Future improvements could fix the bootloader and instead ignore the ENV partition(s).
+
+### Bootstrapping
+
+Before Mender can be used to update the board, it needs to get an initial software flashed somehow.
+This is done with the help of a couple of scripts and the sunxi-tools, but the device needs to be in a special mode for this to work.
+By connecting GND to the FEL pin, a special boot mode i entered and software can be side loaded.
+
+The chip-tools repo contain a small script that transfers spl, u-boot, a tiny u-boot script, and the rootfs image to RAM.
+It then jumps to u-boot, which runs the script and commits the rootfs image from RAM to flash.
+This bootstrap script also resets the environment and finally runs `boot`.
+
+The original version of this script would overwrite a few of the bootloader environments during flashing and had to be modified.
+It was also updated so it writes the ubi image to the correct offset in flash.
+If the bootloader would be updated so it can read/write its environment from a ubi volume instead, the offset can be reverted to the original.
