@@ -2,7 +2,7 @@ Index: git/include/configs/sun5i.h
 ===================================================================
 --- git.orig/include/configs/sun5i.h
 +++ git/include/configs/sun5i.h
-@@ -19,6 +19,19 @@
+@@ -19,6 +19,13 @@
  
  #define CONFIG_SUNXI_USB_PHYS	2
  
@@ -11,18 +11,12 @@ Index: git/include/configs/sun5i.h
 +		"echo '(FEL BOOT)';" \
 +		"source ${scriptaddr};" \
 +	"fi;" \
-+	"run mender_setup;" \
-+	"mtdparts;" \
-+	"ubi part ${mender_mtd_ubi_dev_name};" \
-+	"ubifsmount ${mender_uboot_root_name};" \
-+	"ubifsload ${fdt_addr_r} /boot/sun5i-r8-chip.dtb;" \
-+	"ubifsload ${kernel_addr_r} /boot/zImage;" \
-+	"bootz ${kernel_addr_r} - ${fdt_addr_r};"
-+
++	"run ubiboot; " \
++	"run mender_try_to_recover;"
  /*
   * Include common sunxi configuration where most the settings are
   */
-@@ -26,4 +39,9 @@
+@@ -26,4 +33,9 @@
  
  #define CONFIG_MACH_TYPE	(4138 | ((CONFIG_MACH_TYPE_COMPAT_REV) << 28))
  
@@ -36,13 +30,20 @@ Index: git/include/configs/sunxi-common.h
 ===================================================================
 --- git.orig/include/configs/sunxi-common.h
 +++ git/include/configs/sunxi-common.h
-@@ -542,7 +542,8 @@ extern int soft_i2c_gpio_scl;
+@@ -542,7 +542,15 @@ extern int soft_i2c_gpio_scl;
  	BOOTCMD_SUNXI_COMPAT \
  	"usbnet_devaddr=de:ad:be:af:00:01\0" \
  	"mtdids=nand0=sunxi-nand.0\0" \
 -	"mtdparts=mtdparts=sunxi-nand.0:4m(spl),4m(spl-backup),4m(uboot),4m(env),-(UBI)\0" \
 +	"mtdparts=mtdparts=sunxi-nand.0:4m(spl),4m(spl-backup),4m(u-boot),8m(u-boot-env),-(ubi)\0" \
 +	"bootargs=root=${mender_kernel_root_name} rootfstype=ubifs rw earlyprintk ubi.mtd=${mender_uboot_dev}\0" \
++	"ubiboot=run mender_setup; " \
++		"mtdparts;" \
++		"ubi part ${mender_mtd_ubi_dev_name} && " \
++		"ubifsmount ${mender_uboot_root_name} && " \
++		"ubifsload ${fdt_addr_r} /boot/sun5i-r8-chip.dtb && " \
++		"ubifsload ${kernel_addr_r} /boot/zImage && " \
++		"bootz ${kernel_addr_r} - ${fdt_addr_r}\0" \
  	BOOTENV
  
  #ifdef CONFIG_CHIPPRO_BOOT_FAST
